@@ -3,7 +3,6 @@ package tvchooser
 import (
 	"os"
 	"path/filepath"
-	"runtime"
 	"strings"
 
 	"github.com/aerogu/tvchooser/mounted"
@@ -200,23 +199,21 @@ func newDirectoryView(showHidden bool, textViewToUpdate *tview.TextView, onSelec
 	})
 	rootNode.AddChild(devicesNode)
 
-	if runtime.GOOS == "windows" {
-		devices, err := mounted.GetWindowsDriveLetters()
-		if err != nil {
-			devicesNode.SetColor(tcell.ColorRed)
-			devicesNode.SetSelectable(false)
-		} else {
-			for _, drive := range devices {
-				driveRoot := drive + ":" + string(os.PathSeparator)
-				driveNode := tview.NewTreeNode("► " + driveRoot).SetReference(nodeInfo{
-					Path:     driveRoot,
-					IsRoot:   true,
-					IsCustom: false,
-				})
-				devicesNode.AddChild(driveNode)
-				// Add child nodes to the drive node.
-				// add(devicesNode, driveRoot)
-			}
+	devices, err := mounted.GetDriveLetters()
+	if err != nil {
+		devicesNode.SetColor(tcell.ColorRed)
+		devicesNode.SetSelectable(false)
+	} else {
+		for _, drive := range devices {
+			driveRoot := drive + ":" + string(os.PathSeparator)
+			driveNode := tview.NewTreeNode("► " + driveRoot).SetReference(nodeInfo{
+				Path:     driveRoot,
+				IsRoot:   true,
+				IsCustom: false,
+			})
+			devicesNode.AddChild(driveNode)
+			// Add child nodes to the drive node.
+			// add(devicesNode, driveRoot)
 		}
 	}
 

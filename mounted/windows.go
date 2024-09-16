@@ -1,3 +1,6 @@
+//go:build windows
+// +build windows
+
 package mounted
 
 import (
@@ -6,7 +9,7 @@ import (
 
 // Get a list of mounted devices on Windows.
 // like "wmic logicaldisk get name"
-func GetWindowsDriveLetters() ([]string, error) {
+func GetDriveLetters() ([]string, error) {
 	kernel32, err := syscall.LoadLibrary("kernel32.dll")
 	defer syscall.FreeLibrary(kernel32)
 
