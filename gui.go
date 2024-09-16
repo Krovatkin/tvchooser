@@ -24,13 +24,6 @@ func FileChooser(parentApp *tview.Application, showHidden bool) string {
 	selectedPathView := tview.NewTextView()
 	selectedPathView.SetBorder(true)
 
-	dirView := newDirectoryView(showHidden, selectedPathView, nil)
-	fileView := newFileView("", dirView.showHidden, selectedPathView, dirView)
-	dirView.onSelectedFunc = func(node *tview.TreeNode) {
-		fileView.updatePath(node.GetReference().(nodeInfo).Path)
-	}
-	selectionPanel := tview.NewFlex().SetDirection(tview.FlexColumn).AddItem(dirView.dirView, 0, 1, true).AddItem(fileView.fileList, 0, 1, false)
-
 	buttonsView := tview.NewForm()
 	buttonsView.SetButtonsAlign(tview.AlignRight)
 	// Cancel button
@@ -50,10 +43,18 @@ func FileChooser(parentApp *tview.Application, showHidden bool) string {
 		app.Stop()
 	})
 
+	dirView := newDirectoryView(showHidden, selectedPathView, nil)
+	fileView := newFileView("", dirView.showHidden, selectedPathView, dirView)
+	dirView.onSelectedFunc = func(node *tview.TreeNode) {
+		fileView.updatePath(node.GetReference().(nodeInfo).Path)
+	}
+	dirView.app = app
+	selectionPanel := tview.NewFlex().SetDirection(tview.FlexColumn).AddItem(dirView.dirView, 0, 1, true).AddItem(fileView.fileList, 0, 1, false)
+
 	rootPanel := tview.NewFlex().SetDirection(tview.FlexRow)
 	rootPanel.AddItem(selectedPathView, 3, 0, false)
 	rootPanel.AddItem(selectionPanel, 0, 1, true)
-	rootPanel.AddItem(buttonsView, 3, 0, false)
+	rootPanel.AddItem(buttonsView, 3, 0, true)
 
 	app.SetRoot(rootPanel, true).EnableMouse(true).EnablePaste(true)
 	if parentApp != nil {
@@ -84,6 +85,8 @@ func DirectoryChooser(parentApp *tview.Application, showHidden bool) string {
 	selectedPathView := tview.NewTextView()
 	selectedPathView.SetBorder(true)
 
+	rootPanel := tview.NewFlex().SetDirection(tview.FlexRow)
+
 	dirView := newDirectoryView(showHidden, selectedPathView, nil)
 	selectionPanel := tview.NewFlex().SetDirection(tview.FlexColumn).AddItem(dirView.dirView, 0, 2, true)
 
@@ -100,7 +103,9 @@ func DirectoryChooser(parentApp *tview.Application, showHidden bool) string {
 		app.Stop()
 	})
 
-	rootPanel := tview.NewFlex().SetDirection(tview.FlexRow)
+	dirView.onTabView = buttonsView
+	dirView.app = app
+
 	rootPanel.AddItem(selectedPathView, 3, 0, false)
 	rootPanel.AddItem(selectionPanel, 0, 1, true)
 	rootPanel.AddItem(buttonsView, 3, 0, true)

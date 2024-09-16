@@ -25,6 +25,8 @@ type directoryView struct {
 	showHidden       bool
 	textViewToUpdate *tview.TextView
 	onSelectedFunc   func(node *tview.TreeNode)
+	onTabView        *tview.Form
+	app              *tview.Application
 }
 
 // A helper function which adds the directories of the given path
@@ -227,6 +229,14 @@ func newDirectoryView(showHidden bool, textViewToUpdate *tview.TextView, onSelec
 
 	// If a directory was selected, open it.
 	tree.SetSelectedFunc(dv.onNodeSelected)
+
+	tree.SetDoneFunc(func(key tcell.Key) {
+		if key == tcell.KeyTab {
+			if dv.onTabView != nil {
+				dv.app.SetFocus(dv.onTabView)
+			}
+		}
+	})
 
 	return dv
 }
