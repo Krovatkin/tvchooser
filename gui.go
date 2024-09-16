@@ -103,7 +103,7 @@ func DirectoryChooser(parentApp *tview.Application, showHidden bool) string {
 	rootPanel := tview.NewFlex().SetDirection(tview.FlexRow)
 	rootPanel.AddItem(selectedPathView, 3, 0, false)
 	rootPanel.AddItem(selectionPanel, 0, 1, true)
-	rootPanel.AddItem(buttonsView, 3, 0, false)
+	rootPanel.AddItem(buttonsView, 3, 0, true)
 
 	app.SetRoot(rootPanel, true).EnableMouse(true).EnablePaste(true)
 	if parentApp != nil {
