@@ -5,8 +5,8 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/aerogu/tvchooser/mounted"
-	"github.com/aerogu/tvchooser/tvclang"
+	"github.com/Krovatkin/tvchooser/mounted"
+	"github.com/Krovatkin/tvchooser/tvclang"
 	"github.com/gdamore/tcell/v2"
 	"github.com/rivo/tview"
 )

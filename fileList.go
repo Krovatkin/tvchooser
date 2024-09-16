@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/aerogu/tvchooser/tvclang"
+	"github.com/Krovatkin/tvchooser/tvclang"
 	"github.com/dustin/go-humanize"
 	"github.com/rivo/tview"
 )
