@@ -199,13 +199,12 @@ func newDirectoryView(showHidden bool, textViewToUpdate *tview.TextView, onSelec
 	})
 	rootNode.AddChild(devicesNode)
 
-	devices, err := mounted.GetDriveLetters()
+	devices, err := mounted.GetDrivePaths()
 	if err != nil {
 		devicesNode.SetColor(tcell.ColorRed)
 		devicesNode.SetSelectable(false)
 	} else {
-		for _, drive := range devices {
-			driveRoot := drive + ":" + string(os.PathSeparator)
+		for _, driveRoot := range devices {
 			driveNode := tview.NewTreeNode("► " + driveRoot).SetReference(nodeInfo{
 				Path:     driveRoot,
 				IsRoot:   true,

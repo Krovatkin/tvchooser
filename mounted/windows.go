@@ -9,7 +9,7 @@ import (
 
 // Get a list of mounted devices on Windows.
 // like "wmic logicaldisk get name"
-func GetDriveLetters() ([]string, error) {
+func GetDrivePaths() ([]string, error) {
 	kernel32, err := syscall.LoadLibrary("kernel32.dll")
 	defer syscall.FreeLibrary(kernel32)
 
@@ -40,7 +40,8 @@ func bitsToDrives(bitMap uint32) (drives []string) {
 
 	for i := range availableDrives {
 		if bitMap&1 == 1 {
-			drives = append(drives, availableDrives[i])
+			driveRoot := availableDrives[i] + ":" + string(os.PathSeparator)
+			drives = append(drives, driveRoot)
 		}
 		bitMap >>= 1
 	}

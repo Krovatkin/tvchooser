@@ -3,6 +3,6 @@
 
 package mounted
 
-func GetDriveLetters() ([]string, error) {
+func GetDrivePaths() ([]string, error) {
 	return []string{"/"}, nil
 }
