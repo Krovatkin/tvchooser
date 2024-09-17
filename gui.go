@@ -4,6 +4,7 @@ import (
 	"os"
 
 	"github.com/Krovatkin/tvchooser/tvclang"
+	"github.com/gdamore/tcell/v2"
 	"github.com/rivo/tview"
 )
 
@@ -48,8 +49,14 @@ func FileChooser(parentApp *tview.Application, showHidden bool) string {
 	dirView.onSelectedFunc = func(node *tview.TreeNode) {
 		fileView.updatePath(node.GetReference().(nodeInfo).Path)
 	}
-	dirView.app = app
+
 	selectionPanel := tview.NewFlex().SetDirection(tview.FlexColumn).AddItem(dirView.dirView, 0, 1, true).AddItem(fileView.fileList, 0, 1, false)
+
+	dirView.dirView.SetDoneFunc(func(key tcell.Key) {
+		if key == tcell.KeyTab {
+			app.SetFocus(buttonsView)
+		}
+	})
 
 	rootPanel := tview.NewFlex().SetDirection(tview.FlexRow)
 	rootPanel.AddItem(selectedPathView, 3, 0, false)
@@ -103,8 +110,11 @@ func DirectoryChooser(parentApp *tview.Application, showHidden bool) string {
 		app.Stop()
 	})
 
-	dirView.onTabView = buttonsView
-	dirView.app = app
+	dirView.dirView.SetDoneFunc(func(key tcell.Key) {
+		if key == tcell.KeyTab {
+			app.SetFocus(buttonsView)
+		}
+	})
 
 	rootPanel.AddItem(selectedPathView, 3, 0, false)
 	rootPanel.AddItem(selectionPanel, 0, 1, true)
