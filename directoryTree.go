@@ -172,7 +172,7 @@ func (dv *directoryView) onNodeSelected(node *tview.TreeNode) {
 //
 // Returns:
 // - A pointer to the created directoryView.
-func newDirectoryView(showHidden bool, textViewToUpdate *tview.TextView, onSelectedFunc func(node *tview.TreeNode)) *directoryView {
+func newDirectoryView(showHidden bool, textViewToUpdate *tview.TextView, onSelectedFunc func(node *tview.TreeNode), favouriteDir *string) *directoryView {
 	tree := tview.NewTreeView()
 
 	// Add rootNode node.
@@ -184,7 +184,14 @@ func newDirectoryView(showHidden bool, textViewToUpdate *tview.TextView, onSelec
 	})
 
 	// Add userprofile node.
-	userHomeDir, _ := os.UserHomeDir()
+	var userHomeDir string
+
+	if favouriteDir != nil {
+		userHomeDir = *favouriteDir
+	} else {
+		userHomeDir, _ = os.UserHomeDir()
+	}
+
 	locationsNode := tview.NewTreeNode("► " + tvclang.GetTranslations().HomeDir).SetReference(nodeInfo{
 		Path:     userHomeDir,
 		IsRoot:   true,

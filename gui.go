@@ -12,7 +12,7 @@ import (
 //
 // Takes in a parent application to be paused or nil, and a boolean showHidden to determine if hidden files should be shown.
 // Returns a string representing the selected file path.
-func FileChooser(parentApp *tview.Application, showHidden bool) string {
+func FileChooser(parentApp *tview.Application, showHidden bool, favouriteDir *string) string {
 	selectedPath := ""
 
 	app := tview.NewApplication()
@@ -44,7 +44,7 @@ func FileChooser(parentApp *tview.Application, showHidden bool) string {
 		app.Stop()
 	})
 
-	dirView := newDirectoryView(showHidden, selectedPathView, nil)
+	dirView := newDirectoryView(showHidden, selectedPathView, nil, favouriteDir)
 	fileView := newFileView("", dirView.showHidden, selectedPathView, dirView)
 	dirView.onSelectedFunc = func(node *tview.TreeNode) {
 		fileView.updatePath(node.GetReference().(nodeInfo).Path)
@@ -79,7 +79,7 @@ func FileChooser(parentApp *tview.Application, showHidden bool) string {
 //
 // It takes in a parent application to be paused or nil, and a boolean showHidden to determine if hidden directories should be shown.
 // It returns a string representing the selected directory path.
-func DirectoryChooser(parentApp *tview.Application, showHidden bool) string {
+func DirectoryChooser(parentApp *tview.Application, showHidden bool, favouriteDir *string) string {
 	selectedPath := ""
 
 	app := tview.NewApplication()
@@ -94,7 +94,7 @@ func DirectoryChooser(parentApp *tview.Application, showHidden bool) string {
 
 	rootPanel := tview.NewFlex().SetDirection(tview.FlexRow)
 
-	dirView := newDirectoryView(showHidden, selectedPathView, nil)
+	dirView := newDirectoryView(showHidden, selectedPathView, nil, favouriteDir)
 	selectionPanel := tview.NewFlex().SetDirection(tview.FlexColumn).AddItem(dirView.dirView, 0, 2, true)
 
 	buttonsView := tview.NewForm()
