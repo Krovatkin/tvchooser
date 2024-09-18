@@ -27,12 +27,6 @@ func FileChooser(parentApp *tview.Application, showHidden bool, favouriteDir *st
 
 	buttonsView := tview.NewForm()
 	buttonsView.SetButtonsAlign(tview.AlignRight)
-	// Cancel button
-	buttonsView.AddButton(tvclang.GetTranslations().Cancel, func() {
-		selectedPath = ""
-		app.Stop()
-		buttonsView.SetButtonsAlign(tview.AlignRight)
-	})
 	// Accept button
 	buttonsView.AddButton(tvclang.GetTranslations().Accept, func() {
 		selectedPath = selectedPathView.GetText(false)
@@ -42,6 +36,12 @@ func FileChooser(parentApp *tview.Application, showHidden bool, favouriteDir *st
 		}
 		// selectedPath = dirView.selectedPath + fileView.selectedFileName
 		app.Stop()
+	})
+	// Cancel button
+	buttonsView.AddButton(tvclang.GetTranslations().Cancel, func() {
+		selectedPath = ""
+		app.Stop()
+		buttonsView.SetButtonsAlign(tview.AlignRight)
 	})
 
 	dirView := newDirectoryView(showHidden, selectedPathView, nil, favouriteDir)
